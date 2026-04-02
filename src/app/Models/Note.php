@@ -11,4 +11,9 @@ class Note extends Model
         'content',
         'is_important',
     ];
+
+    public function client()
+    {
+        return $this->belongsTo(Client::class);
+    }
 }

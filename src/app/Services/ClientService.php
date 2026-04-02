@@ -14,13 +14,7 @@ class ClientService
 
     public function getById(int $id): ?Client
     {
-        $client = Client::find($id);
-
-        if ($client == null) {
-            return null;
-        }
-
-        return $client;
+        return Client::with('notes')->find($id);
     }
 
     public function store(array $data): Client
@@ -28,7 +22,7 @@ class ClientService
         return Client::create($data);
     }
 
-    public function update(array $data, int $id): ?Client
+    public function update(int $id, array $data): ?Client
     {
         $client = $this->getById($id);
 

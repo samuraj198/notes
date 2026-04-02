@@ -11,4 +11,9 @@ class Client extends Model
         'email',
         'phone'
     ];
+
+    public function notes()
+    {
+        return $this->hasMany(Note::class);
+    }
 }
