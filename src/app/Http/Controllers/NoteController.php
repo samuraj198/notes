@@ -11,6 +11,18 @@ class NoteController extends Controller
     public function __construct(private NoteService $noteService)
     {}
 
+    public function importantNotes()
+    {
+        $notes = $this->noteService->importantNotes();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Важные заметки с именами клиентов',
+            'count' => $notes->count(),
+            'items' => $notes
+        ]);
+    }
+
     public function show(int $id): JsonResponse
     {
         $note = $this->noteService->getById($id);
