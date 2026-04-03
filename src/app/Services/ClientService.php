@@ -3,13 +3,13 @@
 namespace App\Services;
 
 use App\Models\Client;
-use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class ClientService
 {
-    public function getAll(): Collection
+    public function getAll(): LengthAwarePaginator
     {
-        return Client::sortBy('created_at', 'desc')->paginate(10);
+        return Client::orderBy('created_at', 'desc')->paginate(10);
     }
 
     public function getById(int $id): ?Client

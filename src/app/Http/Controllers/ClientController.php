@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\StoreClientRequest;
 use App\Http\Requests\UpdateClientRequest;
+use App\Http\Resources\ClientResource;
 use App\Services\ClientService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
@@ -21,7 +22,7 @@ class ClientController extends Controller
             'success' => true,
             'message' => 'Список клиентов',
             'count' => $clients->count(),
-            'items' => $clients
+            'items' => ClientResource::collection($clients)
         ]);
     }
 
@@ -32,7 +33,7 @@ class ClientController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Клиент успешно создан',
-            'data' => $client
+            'data' => ClientResource::make($client)
         ]);
     }
 
@@ -50,13 +51,13 @@ class ClientController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Получен клиент',
-            'data' => $client
+            'data' => ClientResource::make($client)
         ]);
     }
 
     public function update(UpdateClientRequest $request, $id): JsonResponse
     {
-        $updatedClient = $this->clientService->update($request->validated(), $id);
+        $updatedClient = $this->clientService->update($id, $request->validated());
 
         if ($updatedClient === null) {
             return response()->json([
@@ -68,7 +69,7 @@ class ClientController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Данные клиента успешно обновлены',
-            'data' => $updatedClient
+            'data' => ClientResource::make($updatedClient)
         ]);
     }
 

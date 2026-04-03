@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\NoteRequest;
+use App\Http\Resources\NoteResource;
 use App\Services\NoteService;
 use Illuminate\Http\JsonResponse;
 
@@ -19,7 +20,7 @@ class NoteController extends Controller
             'success' => true,
             'message' => 'Важные заметки с именами клиентов',
             'count' => $notes->count(),
-            'items' => $notes
+            'items' => NoteResource::collection($notes)
         ]);
     }
 
@@ -37,18 +38,18 @@ class NoteController extends Controller
         return response()->json([
             'success' => true,
             'message' => 'Получена 1 заметка',
-            'data' => $note
+            'data' => NoteResource::make($note)
         ]);
     }
 
     public function store($clientId, NoteRequest $request): JsonResponse
     {
-        $note = $this->noteService->store($request->validated(), $clientId);
+        $note = $this->noteService->store($clientId, $request->validated());
 
         return response()->json([
             'success' => true,
-            'message' => 'Вы создали заметку для пользователя' . $note->client->name,
-            'data' => $note
+            'message' => 'Вы создали заметку для пользователя ' . $note->client->name,
+            'data' => NoteResource::make($note)
         ]);
     }
 
@@ -65,8 +66,8 @@ class NoteController extends Controller
 
         return response()->json([
             'success' => true,
-            'message' => 'Заметка для клиента' . $updatedNote->client->name . 'была обновлена',
-            'data' => $updatedNote
+            'message' => 'Заметка для клиента ' . $updatedNote->client->name . ' была обновлена',
+            'data' => NoteResource::make($updatedNote)
         ]);
     }
 
