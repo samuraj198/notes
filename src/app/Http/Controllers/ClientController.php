@@ -34,7 +34,7 @@ class ClientController extends Controller
             'success' => true,
             'message' => 'Клиент успешно создан',
             'data' => ClientResource::make($client)
-        ]);
+        ], 201);
     }
 
     public function show(int $id): JsonResponse

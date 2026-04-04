@@ -50,7 +50,7 @@ class NoteController extends Controller
             'success' => true,
             'message' => 'Вы создали заметку для пользователя ' . $note->client->name,
             'data' => NoteResource::make($note)
-        ]);
+        ], 201);
     }
 
     public function update(int $id, NoteRequest $request): JsonResponse
