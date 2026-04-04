@@ -21,3 +21,4 @@ Route::prefix('notes')->group(function () {
     Route::delete('/{noteId}', [NoteController::class, 'destroy']);
 });
 Route::get('/important-notes', [NoteController::class, 'importantNotes']);
+Route::post('/notes/{note}/restore', [NoteController::class, 'restore']);

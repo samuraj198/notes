@@ -48,4 +48,15 @@ class NoteService
 
         return $note->delete();
     }
+
+    public function restore(int $id): ?Note
+    {
+        $note = Note::withTrashed()->find($id);
+
+        if ($note != null) {
+            $note->restore();
+        }
+
+        return $note;
+    }
 }

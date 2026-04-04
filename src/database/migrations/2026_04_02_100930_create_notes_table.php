@@ -17,6 +17,7 @@ return new class extends Migration
             $table->text('content');
             $table->boolean('is_important')->default(false);
             $table->integer('created_by')->default(1);
+            $table->softDeletes();
             $table->timestamps();
         });
     }

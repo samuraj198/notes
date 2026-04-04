@@ -96,4 +96,21 @@ class NoteController extends Controller
             ], 500);
         }
     }
+
+    public function restore(int $id): JsonResponse
+    {
+        $restoredNote = $this->noteService->restore($id);
+
+        if ($restoredNote == null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Заметка не найдена'
+            ], 404);
+        }
+
+        return response()->json([
+            'success' => true,
+            'message' => "Заметка $restoredNote->id восстановлена"
+        ]);
+    }
 }
