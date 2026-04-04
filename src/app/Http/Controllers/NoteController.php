@@ -46,6 +46,13 @@ class NoteController extends Controller
     {
         $note = $this->noteService->store($clientId, $request->validated());
 
+        if ($note == null) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Клиент не найден'
+            ], 404);
+        }
+
         return response()->json([
             'success' => true,
             'message' => 'Вы создали заметку для пользователя ' . $note->client->name,

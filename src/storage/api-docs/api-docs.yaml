@@ -1,0 +1,514 @@
+openapi: 3.0.3
+info:
+  title: Notes for clients
+  description: Notes for clients
+  version: 1.0.0
+servers:
+  - url: 'http://localhost/api'
+paths:
+  /clients:
+    get:
+      summary: "Get list of clients"
+      tags:
+        - Clients
+      responses:
+        '200':
+          description: "Successfully get list of clients"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Список клиентов"
+                  count:
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Client'
+    post:
+      summary: "Store client"
+      tags:
+        - Clients
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreClient'
+      responses:
+        '201':
+          description: "Successfully store client"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Клиент успешно создан"
+                  data:
+                    $ref: '#/components/schemas/Client'
+  /clients/{id}:
+    get:
+      summary: "Get 1 client"
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successfully get 1 client"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Получен клиент"
+                  data:
+                    $ref: '#/components/schemas/ClientWithNotes'
+        '404':
+          description: "Client not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Клиент не найден"
+    put:
+      summary: "Update client"
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreClient'
+      responses:
+        '200':
+          description: "Successfully update client"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Данные клиента успешно обновлены"
+                  data:
+                    $ref: '#/components/schemas/ClientWithNotes'
+        '404':
+          description: "Client not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Клиент не найден"
+    delete:
+      summary: "Delete client"
+      tags:
+        - Clients
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successfully delete 1 client"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Клиент успешно удален"
+        '404':
+          description: "Client not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Клиент не найден"
+        '500':
+          description: "Something went wrong"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Не удалось удалить клиента"
+  /clients/{clientId}/notes:
+    post:
+      summary: Store 1 note
+      tags:
+        - Notes
+      parameters:
+        - name: clientId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreNote'
+      responses:
+        '201':
+          description: "Successfully store note"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Вы создали заметку для пользователя Daniil"
+                  data:
+                    $ref: '#/components/schemas/Note'
+        '404':
+          description: "Client not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Клиент не найден"
+
+  /notes/{noteId}:
+    get:
+      summary: "Get 1 note"
+      tags:
+        - Notes
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Successfully get 1 note
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Получена 1 заметка"
+                  data:
+                    $ref: '#/components/schemas/Note'
+        '404':
+          description: "Note not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Заметка не найдена"
+    put:
+      summary: "Update note"
+      tags:
+        - Notes
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StoreNote'
+      responses:
+        '200':
+          description: "Successfully update note"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Заметка для клиента Daniil была обновлена"
+                  data:
+                    $ref: '#/components/schemas/Note'
+        '404':
+          description: "Note not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Заметка не найдена"
+    delete:
+      summary: "Delete note"
+      tags:
+        - Notes
+      parameters:
+        - name: noteId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successfully delete note"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Вы успешно удалили заметку о клиенте Daniil"
+        '404':
+          description: "Note not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Заметка не найдена"
+        '500':
+          description: "Something went wrong"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Не удалось удалить заметку о клиенте Daniil"
+  /notes/{note}/restore:
+    post:
+      summary: Restore 1 note
+      tags:
+        - Notes
+      parameters:
+        - name: note
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: "Successfully restore note"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Заметка 1 восстановлена"
+        '404':
+          description: "Note not found"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: false
+                  message:
+                    type: string
+                    example: "Заметка не найдена"
+  /important-notes:
+    get:
+      summary: "Get only important notes"
+      tags:
+        - Notes
+      responses:
+        '200':
+          description: "Successfully get important notes"
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  success:
+                    type: boolean
+                    example: true
+                  message:
+                    type: string
+                    example: "Важные заметки с именами клиентов"
+                  count:
+                    type: integer
+                    example: 1
+                  items:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Note'
+
+components:
+  schemas:
+    Client:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Daniil"
+        email:
+          type: string
+          example: "example@example.com"
+        phone:
+          type: string
+          example: "1234567890"
+    StoreClient:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "Daniil"
+        email:
+          type: string
+          example: "example@example.com"
+        phone:
+          type: string
+          example: "1234567890"
+    ClientWithNotes:
+      type: object
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Daniil"
+        email:
+          type: string
+          example: "example@example.com"
+        phone:
+          type: string
+          example: "1234567890"
+        notes:
+          type: array
+          items:
+            $ref: '#/components/schemas/Note'
+    Note:
+      type: object
+      properties:
+        client_name:
+          type: string
+          example: "Daniil"
+        id:
+          type: integer
+          example: 1
+        content:
+          type: string
+          example: "Some text"
+        is_important:
+          type: boolean
+          example: true
+    StoreNote:
+      type: object
+      properties:
+        content:
+          type: string
+          example: "Some text"
+        is_important:
+          type: boolean
+          example: true

@@ -135,4 +135,26 @@ class NoteTest extends TestCase
 
         $response->assertStatus(200);
     }
+
+    public function test_restore_note()
+    {
+        $client = Client::factory()->has(Note::factory())->create();
+
+        $note = $client->notes->first();
+
+        $delete = $this->delete('/api/notes/' . $note->id);
+
+        $this->assertDatabaseHas('notes', ['content' => $note->content, 'deleted_at' => now()]);
+
+        $response = $this->post('/api/notes/' . $note->id . '/restore');
+
+        $this->assertDatabaseHas('notes', ['content' => $note->content, 'deleted_at' => null]);
+
+        $response->assertJsonStructure([
+            'success',
+            'message'
+        ]);
+
+        $response->assertStatus(200);
+    }
 }

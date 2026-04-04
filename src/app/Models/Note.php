@@ -16,6 +16,10 @@ class Note extends Model
         'is_important',
     ];
 
+    protected $casts = [
+        'is_important' => 'boolean',
+    ];
+
     public function client()
     {
         return $this->belongsTo(Client::class);

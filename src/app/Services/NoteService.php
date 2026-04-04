@@ -7,6 +7,9 @@ use Illuminate\Database\Eloquent\Collection;
 
 class NoteService
 {
+    public function __construct(private ClientService $clientService)
+    {}
+
     public function getById(int $id): ?Note
     {
         return Note::find($id);
@@ -17,8 +20,12 @@ class NoteService
         return Note::with('client:id,name')->where('is_important', true)->get();
     }
 
-    public function store(int $clientId, array $data): Note
+    public function store(int $clientId, array $data): ?Note
     {
+        if ($this->clientService->getById($clientId) == null) {
+            return null;
+        }
+
         $data['client_id'] = $clientId;
         $note = Note::create($data);
 
